@@ -1,3 +1,4 @@
+//To compile: gcc -ggdb -O0 ./constructor_destructor.c -o binary
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
