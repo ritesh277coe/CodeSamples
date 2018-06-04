@@ -1,0 +1,4 @@
+vector.reserve.
+      If possible, Always try to call vector.reserve(num_elements) before starting pushing elements.
+      It will save new memory allocations, copying of old elements, and then destruction of old elements which happens when new memory 
+      is allocated and to accomodate new element.
