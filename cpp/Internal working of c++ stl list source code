@@ -1,0 +1,118 @@
+Source code link:
+http://cs.brown.edu/~jwicks/libstdc++/html_user/stl__list_8h-source.html
+
+//Note: I will try to stress upon main principles only.
+
+struct _List_node_base   //Holds next prev pointers of _List_node_base
+{
+  _List_node_base* _M_next;   ///< Self-explanatory                                                                                                                                                                                                                             
+  _List_node_base* _M_prev;   ///< Self-explanatory
+};
+
+template<typename _Tp>
+struct _List_node : public _List_node_base
+{
+  _Tp _M_data;     ///< User's data. 
+};
+
+//Note:
+_List_node_base only hold pointers to move left and right of node.
+_List_node hold user data and publicly inherts _List_node_base
+
+Memory layout of _List_node:
+_List_node_base *next
+_List_node_base* prev
+_Tp _M_data;
+
+So if class needs to iterate on the list, it only needs _List_node_base reference/pointer.
+//Illustrating above point with an example, _List_iterator's only data member is _List_node_base* _M_node
+
+template<typename _Tp>
+struct _List_iterator {
+// The only member points to the %list element.
+_List_node_base* _M_node;
+
+//Functions supported by iterator
+//constructor
+_List_iterator(_List_node_base* __x)
+    : _M_node(__x) { }
+    
+ //For iterating on list:
+ _Self&
+  operator++()
+  {
+    _M_node = _M_node->_M_next;
+    return *this;
+  }
+
+  _Self
+  operator++(int)
+  {
+    _Self __tmp = *this;
+    _M_node = _M_node->_M_next;
+    return __tmp;
+  }
+
+  _Self&
+  operator--()
+  {
+    _M_node = _M_node->_M_prev;
+    return *this;
+  }
+
+  _Self
+  operator--(int)
+  {
+    _Self __tmp = *this;
+    _M_node = _M_node->_M_prev;
+    return __tmp;
+  }
+  
+  //But iterator has to support *, ->  operators too, for data access.
+  //Notice the downcast of _M_data from _List_node_base* to _List_node* to access the data member of _List_node.
+  //And this is possible because _List_node_base is base class of _List_node.
+  reference
+  operator*() const
+  { return static_cast<_Node*>(_M_node)->_M_data; }
+
+  pointer
+  operator->() const
+  { return &static_cast<_Node*>(_M_node)->_M_data; }
+
+};
+
+template<typename _Tp, typename _Alloc>
+class _List_base
+{
+   //Below node is very important as it is what holds head and tail of the list.
+   //When ever iterator functions begin/end are called, they create a new iterator object based upon the _M_impl node.
+  struct _List_impl
+    : public _Node_Alloc_type {
+    _List_node_base _M_node;
+    _List_impl (const _Node_Alloc_type& __a)
+      : _Node_Alloc_type(__a)
+    { }
+    
+    _List_impl _M_impl;
+    //Function to notice
+    void
+  _M_init()
+  {
+    this->_M_impl._M_node._M_next = &this->_M_impl._M_node;
+    this->_M_impl._M_node._M_prev = &this->_M_impl._M_node;
+  }
+  };
+
+  
+  
+//Use custom allocator to allocate/deallocate memory space for _List_node<_Tp>
+//TODO:: explain how allocator understand allocation of _List_node<_Tp> object.
+}
+
+template<typename _Tp, typename _Alloc = allocator<_Tp> >
+class list : protected _List_base<_Tp, _Alloc>
+{
+};
+
+
+
