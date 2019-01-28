@@ -129,6 +129,8 @@ class _List_base
 template<typename _Tp, typename _Alloc = allocator<_Tp> >
 class list : protected _List_base<_Tp, _Alloc>
 {
+    //It has not data member of it own, except the _List_impl _M_impl; that is part of _List_base class.
+    All it contains are operation/function on list like push_back, push_front, etc.
 };
 
 
