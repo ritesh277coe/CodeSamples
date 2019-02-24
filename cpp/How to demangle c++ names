@@ -1,0 +1,13 @@
+//https://stackoverflow.com/questions/49381011/what-does-ztv-zts-zti-mean-in-the-result-of-gdb-x-nfu-vtable-address
+
+c++filt is the tool to demangle the names.
+
+For ex:
+c++filt __ZTS4base
+typeinfo name for base
+
+c++filt __ZTI4base
+typeinfo for base
+
+c++filt __ZTV4base
+vtable for base
