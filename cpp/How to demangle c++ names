@@ -1,6 +1,6 @@
 //https://stackoverflow.com/questions/49381011/what-does-ztv-zts-zti-mean-in-the-result-of-gdb-x-nfu-vtable-address
 
-c++filt is the tool to demangle the names.
+c++filt is the GNU tool to demangle the names.
 
 For ex:
 c++filt __ZTS4base
